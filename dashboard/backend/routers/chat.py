@@ -44,6 +44,17 @@ async def reconnect(request: Request):
     }
 
 
+@router.post("/colab-url")
+async def set_colab_url(request: Request, data: dict):
+    url = data.get("url", "").strip()
+    if not url:
+        return {"success": False, "error": "URL is empty"}
+    colab = request.app.state.colab
+    colab.update_url(url)
+    request.app.state.colab_url = url
+    return {"success": True, "colab_url": url}
+
+
 @router.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest, request: Request):
     session_id = req.session_id or str(uuid.uuid4())

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { api } from "@/api/client";
 
 export default function SettingsPage() {
   const [colabUrl, setColabUrl] = useState("http://localhost:8080");
@@ -11,8 +12,13 @@ export default function SettingsPage() {
   }, []);
   const [saved, setSaved] = useState(false);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     localStorage.setItem("colab_url", colabUrl);
+    try {
+      await api.setColabUrl(colabUrl);
+    } catch {
+      // backend mungkin belum jalan, simpan lokal tetap jalan
+    }
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };

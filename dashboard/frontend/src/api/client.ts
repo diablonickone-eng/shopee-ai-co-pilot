@@ -86,4 +86,10 @@ export const api = {
     fetchAPI<{ session_id: string; analytics: any }>(
       `/analytics/${session_id}`
     ),
+
+  setColabUrl: (url: string) =>
+    fetchAPI<{ success: boolean; colab_url: string }>("/colab-url", {
+      method: "POST",
+      body: JSON.stringify({ url }),
+    }),
 };

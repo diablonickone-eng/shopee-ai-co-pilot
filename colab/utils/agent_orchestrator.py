@@ -33,7 +33,10 @@ class AgentOrchestrator:
         start = time.time()
 
         if intent in self.subagents:
-            result = await self.subagents[intent].process(user_input, context or {})
+            try:
+                result = await self.subagents[intent].process(user_input, context or {})
+            except Exception as e:
+                result = {"details": f"Subagent error: {str(e)}", "variants": "", "tips": ""}
             trace.append(
                 {
                     "agent": intent,
