@@ -1,0 +1,14 @@
+node_modules/
+.next/
+*.pyc
+__pycache__/
+.env
+dist/
+build/
+*.egg-info/
+dashboard/frontend/out/
+dashboard/backend/__pycache__/
+dashboard/backend/data/
+*.log
+.DS_Store
+**/.ipynb_checkpoints/
