@@ -12,9 +12,9 @@ export function useColab() {
 
   const checkConnection = useCallback(async () => {
     try {
-      const health = await api.health();
-      setIsConnected(health.status === "ok");
-      return health.status === "ok";
+      const status = await api.getStatus();
+      setIsConnected(status.colab_connected);
+      return status.colab_connected;
     } catch {
       setIsConnected(false);
       return false;

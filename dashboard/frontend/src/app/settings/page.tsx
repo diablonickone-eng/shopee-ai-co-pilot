@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function SettingsPage() {
-  const [colabUrl, setColabUrl] = useState(
-    () => localStorage.getItem("colab_url") || "http://localhost:8080"
-  );
+  const [colabUrl, setColabUrl] = useState("http://localhost:8080");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("colab_url");
+    if (saved) setColabUrl(saved);
+  }, []);
   const [saved, setSaved] = useState(false);
 
   const handleSave = () => {

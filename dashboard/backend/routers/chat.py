@@ -1,4 +1,5 @@
 import uuid
+import time
 from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from typing import Optional, Dict
@@ -16,6 +17,31 @@ class ChatResponse(BaseModel):
     intent: str
     session_id: str
     agent_trace: list = []
+
+
+@router.get("/status")
+async def get_status(request: Request):
+    colab = request.app.state.colab
+    health = await colab.check_health()
+    return {
+        "colab_connected": colab.is_connected,
+        "colab_url": colab.base_url,
+        "colab_health": health,
+        "last_seen": colab.last_connected,
+        "uptime_seconds": int(time.time() - colab.last_connected),
+    }
+
+
+@router.post("/reconnect")
+async def reconnect(request: Request):
+    colab = request.app.state.colab
+    colab.update_url(colab.base_url)
+    health = await colab.check_health()
+    return {
+        "success": colab.is_connected,
+        "colab_url": colab.base_url,
+        "colab_health": health,
+    }
 
 
 @router.post("/chat", response_model=ChatResponse)

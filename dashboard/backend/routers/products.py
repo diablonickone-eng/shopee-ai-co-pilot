@@ -22,7 +22,7 @@ class ProductSchema(BaseModel):
 
 
 @router.post("/products/upload")
-async def upload_products(file: UploadFile = File(...), request: Request):
+async def upload_products(request: Request, file: UploadFile = File(...)):
     session_id = str(uuid.uuid4())
     db = request.app.state.db
 
@@ -58,9 +58,9 @@ async def get_products(session_id: str, request: Request):
 
 @router.post("/products/{session_id}/analyze")
 async def analyze_products(
+    request: Request,
     session_id: str,
     analysis_type: str = "all",
-    request: Request,
 ):
     db = request.app.state.db
     colab = request.app.state.colab

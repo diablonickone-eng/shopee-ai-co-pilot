@@ -14,8 +14,27 @@ async function fetchAPI<T>(
   return res.json();
 }
 
+interface StatusResponse {
+  colab_connected: boolean;
+  colab_url: string;
+  colab_health: any;
+  last_seen: number;
+  uptime_seconds: number;
+}
+
+interface ReconnectResponse {
+  success: boolean;
+  colab_url: string;
+  colab_health: any;
+}
+
 export const api = {
   health: () => fetchAPI<{ status: string }>("/health"),
+
+  getStatus: () => fetchAPI<StatusResponse>("/status"),
+
+  reconnect: () =>
+    fetchAPI<ReconnectResponse>("/reconnect", { method: "POST" }),
 
   chat: (message: string, session_id?: string) =>
     fetchAPI<{
